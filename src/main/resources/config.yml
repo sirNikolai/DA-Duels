@@ -1,0 +1,5 @@
+dbPath: "jdbc:mysql://localhost:3306/"
+username: root
+password: pwd
+webUsername: root
+webPassword: pwd

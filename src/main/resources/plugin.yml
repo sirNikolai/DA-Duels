@@ -1,0 +1,7 @@
+name: DA Duels
+version: ${project.version}
+main: io.github.sirnik.daduels.DADuels
+api-version: 1.13
+authors: [sirNik]
+description: Organized duelling plugin
+website: https://sirnik.dev
