@@ -42,7 +42,7 @@ public final class DADuels extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryEvents(),this);
         Bukkit.getPluginManager().registerEvents(new MatchEvents(),this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeath(),this);
-        Bukkit.getPluginManager().registerEvents(new PlayerQuitTeleport(),this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuit(),this);
 
         //Commands
         CommandManager commandManager = new CommandManager("daduels");
