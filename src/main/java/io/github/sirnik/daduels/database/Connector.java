@@ -51,7 +51,7 @@ public class Connector {
     }
 
     /**
-     * Creates the table if it does not exist (will send warning otherwise.
+     * Creates the table if it does not exist (will send warning otherwise).
      */
     public void createTable() {
         List<String> names = Arrays.asList(
@@ -65,14 +65,14 @@ public class Connector {
                 "y2 INTEGER",
                 "z2 INTEGER",
                 "PRIMARY KEY (id)");
-        try(Connection connection = dataSource.getConnection(); PreparedStatement ps = connection.prepareStatement(String.format(
+
+        String stmt = String.format(
                 "CREATE TABLE IF NOT EXISTS %s (%s)",
                 TABLE_NAME,
-                String.join(", ", names)))) {
-            Bukkit.getLogger().log(Level.INFO, "Executing statement: " + String.format(
-                    "CREATE TABLE IF NOT EXISTS %s (%s)",
-                    TABLE_NAME,
-                    String.join(", ", names)));
+                String.join(", ", names));
+
+        try(Connection connection = dataSource.getConnection(); PreparedStatement ps = connection.prepareStatement(stmt)) {
+            Bukkit.getLogger().log(Level.INFO, "Executing statement: " + stmt);
 
             ps.execute();
         } catch (SQLException e) {
