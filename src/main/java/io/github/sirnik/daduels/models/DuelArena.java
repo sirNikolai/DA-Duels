@@ -100,8 +100,8 @@ public class DuelArena {
         }
 
         if(player1 == null) {
-            Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
             player1 = player;
+            Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
             return true;
         }
 
@@ -110,8 +110,8 @@ public class DuelArena {
         }
 
         if(player2 == null) {
-            Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
             player2 = player;
+            Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
             return true;
         }
 

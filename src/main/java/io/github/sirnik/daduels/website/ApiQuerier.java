@@ -23,7 +23,9 @@ public class ApiQuerier {
         client = new OkHttpClient();
     }
 
-    public static void recordResult(String baseUrl, UUID winner, UUID loser) throws IOException {
+    public static void recordResult(UUID winner, UUID loser) throws IOException {
+        String baseUrl = DADuels.getInstance().getConfig().getString("webPath");
+
         Map<String, String> map = new HashMap<>();
         String recordUrl = String.format("%s/duel/private/record", baseUrl);
 
@@ -31,14 +33,14 @@ public class ApiQuerier {
         map.put("loser", loser.toString());
 
         String authString = getLogin(
-                DADuels.getInstance().getConfig().getString("webPath"),
+                baseUrl,
                 DADuels.getInstance().getConfig().getString("webUsername"),
                 DADuels.getInstance().getConfig().getString("webPassword"));
 
         Request request = new Request.Builder()
                 .url(recordUrl)
                 .addHeader("Authorization", authString)
-                .post(RequestBody.create(gson.toJson(map).getBytes()))
+                .post(RequestBody.create(MediaType.parse("application/json"), gson.toJson(map)))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -50,6 +52,9 @@ public class ApiQuerier {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if(response.code() != 200) {
+                    throw new IOException(String.format("Could not record match. Please contact sirNik: winner: %s, loser %s", winner, loser));
+                }
                 Bukkit.getLogger().log(Level.INFO, String.format("[DADuels] Recorded match between %s (winner) and %s (loser)", winner, loser));
             }
         });

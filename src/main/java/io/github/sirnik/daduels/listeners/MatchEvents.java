@@ -1,13 +1,18 @@
 package io.github.sirnik.daduels.listeners;
 
+import io.github.sirnik.daduels.DADuels;
 import io.github.sirnik.daduels.events.DuelMatchEndEvent;
 import io.github.sirnik.daduels.events.DuelMatchJoinEvent;
 import io.github.sirnik.daduels.events.DuelMatchStartEvent;
 import io.github.sirnik.daduels.utils.ArenaManager;
+import io.github.sirnik.daduels.website.ApiQuerier;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
+
+import java.io.IOException;
 
 public class MatchEvents implements Listener {
 
@@ -35,6 +40,14 @@ public class MatchEvents implements Listener {
 
         e.getWinner().sendTitle(ChatColor.GREEN + "Winner!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
         e.getLoser().sendTitle(ChatColor.RED + "Loser!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
+
+        Bukkit.getScheduler().runTaskAsynchronously(DADuels.getInstance(), () -> {
+            try {
+                ApiQuerier.recordResult(e.getWinner().getUniqueId(), e.getLoser().getUniqueId());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     @EventHandler

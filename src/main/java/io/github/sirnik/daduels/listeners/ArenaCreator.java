@@ -2,6 +2,7 @@ package io.github.sirnik.daduels.listeners;
 
 import io.github.sirnik.daduels.utils.ArenaCreatorManager;
 import io.github.sirnik.daduels.utils.MessageManager;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,7 +20,9 @@ public class ArenaCreator implements Listener {
             return;
         }
 
-        if(ArenaCreatorManager.INSTANCE.addSpawnPoint(e.getPlayer(), e.getClickedBlock().getLocation(), e.getAction())) {
+        if(ArenaCreatorManager.INSTANCE.addSpawnPoint(
+                e.getPlayer(), e.getClickedBlock().getRelative(BlockFace.UP).getLocation(),
+                e.getAction())) {
             e.setCancelled(true);
 
             MessageManager.getManager(e.getPlayer()).sendMessage(MessageManager.MessageType.GOOD, "Point set.");
