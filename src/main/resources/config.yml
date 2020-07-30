@@ -1,4 +1,5 @@
 dbPath: "jdbc:mysql://localhost:3306/"
+webPath: "192.168.1.10/dastats"
 username: root
 password: pwd
 webUsername: root

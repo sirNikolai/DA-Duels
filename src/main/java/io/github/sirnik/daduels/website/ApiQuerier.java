@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class ApiQuerier {
-    private static final String BASE_URL = "https://sirnik.dev/dastats";
     private static OkHttpClient client;
     private static Gson gson;
 
@@ -24,14 +23,15 @@ public class ApiQuerier {
         client = new OkHttpClient();
     }
 
-    public static void recordResult(UUID winner, UUID loser) throws IOException {
+    public static void recordResult(String baseUrl, UUID winner, UUID loser) throws IOException {
         Map<String, String> map = new HashMap<>();
-        String recordUrl = String.format("%s/duel/private/record", BASE_URL);
+        String recordUrl = String.format("%s/duel/private/record", baseUrl);
 
         map.put("winner", winner.toString());
         map.put("loser", loser.toString());
 
         String authString = getLogin(
+                DADuels.getInstance().getConfig().getString("webPath"),
                 DADuels.getInstance().getConfig().getString("webUsername"),
                 DADuels.getInstance().getConfig().getString("webPassword"));
 
@@ -55,8 +55,8 @@ public class ApiQuerier {
         });
     }
 
-    private static String getLogin(String username, String password) throws IOException {
-        String loginUrl = String.format("%s/authenticate?username=%s&password=%s", BASE_URL, username, password);
+    private static String getLogin(String  baseUrl, String username, String password) throws IOException {
+        String loginUrl = String.format("%s/authenticate?username=%s&password=%s", baseUrl, username, password);
         Request request = new Request.Builder().url(loginUrl).build();
 
         try (Response response = client.newCall(request).execute()) {
