@@ -224,7 +224,6 @@ public enum ArenaManager {
             if(arena.getCurrentState() == DuelState.INGAME) {
                 this.endGame(player);
             } else {
-                System.out.println("remove2");
                 arena.removePlayer(player);
             }
 
