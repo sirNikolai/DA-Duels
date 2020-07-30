@@ -34,4 +34,8 @@ public class DuelMatchStartEvent extends Event {
     public DuelArena getDuelArena() {
         return duelArena;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }

@@ -34,4 +34,8 @@ public class DuelMatchEndEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }

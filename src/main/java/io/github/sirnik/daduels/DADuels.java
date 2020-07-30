@@ -20,6 +20,16 @@ public final class DADuels extends JavaPlugin {
         // Plugin startup logic
         instance = this;
 
+        //Config
+        if (!this.getDataFolder().exists()) {
+            if (!this.getDataFolder().mkdirs()) {
+                Bukkit.getLogger().warning("Could not create main plugin folder. Need to do so manually");
+            }
+        }
+
+        getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+
         Connector.getInstance().createTable();
         List<DuelArena> arenas = Connector.getInstance().getArenas();
 
@@ -44,16 +54,6 @@ public final class DADuels extends JavaPlugin {
         commandManager.addCommand(new OpenGui());
         commandManager.addCommand(new SaveArena());
         commandManager.addCommand(new ToggleArena());
-
-        //Config
-        if (!this.getDataFolder().exists()) {
-            if (!this.getDataFolder().mkdirs()) {
-                Bukkit.getLogger().warning("Could not create main plugin folder. Need to do so manually");
-            }
-        }
-
-        getConfig().options().copyDefaults(true);
-        saveDefaultConfig();
     }
 
     @Override

@@ -1,4 +1,4 @@
-name: DA Duels
+name: DADuels
 version: ${project.version}
 main: io.github.sirnik.daduels.DADuels
 api-version: 1.13
