@@ -42,6 +42,7 @@ public enum ArenaManager {
      */
     public void deleteArena(DuelArena arena) {
         arenas.remove(arena.getName().toUpperCase());
+        Connector.getInstance().deleteArena(arena);
     }
 
     /**
@@ -223,6 +224,7 @@ public enum ArenaManager {
             if(arena.getCurrentState() == DuelState.INGAME) {
                 this.endGame(player);
             } else {
+                System.out.println("remove2");
                 arena.removePlayer(player);
             }
 
@@ -239,6 +241,7 @@ public enum ArenaManager {
      * <ul>
      *     <li>arena is null</li>
      *     <li>arena is full</li>
+     *     <li>player is already in an arena</li>
      * </ul>
      *
      * @param player Player to be added.
@@ -247,7 +250,7 @@ public enum ArenaManager {
      * @return if the player was added to arena.
      */
     public boolean addPlayer(Player player, DuelArena arena) {
-        if(arena == null) {
+        if(arena == null || this.inGamePlayers.containsKey(player.getUniqueId())) {
             return false;
         }
 

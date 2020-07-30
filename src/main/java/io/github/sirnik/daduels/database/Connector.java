@@ -115,13 +115,24 @@ public class Connector {
         return Collections.emptyList();
     }
 
+    public void deleteArena(DuelArena arena) {
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement ps = connection.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE arena_name = ?")) {
+            ps.setString(1, arena.getName());
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Saves a new or overwrites a current arena.
      *
      * @param arena Arena to be saved.
      */
     public void saveArena(DuelArena arena) {
-        String sql = null;
+        String sql;
         boolean isUpdate = false;
 
         if(this.arenaExists(arena)) {

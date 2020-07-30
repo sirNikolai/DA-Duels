@@ -1,5 +1,7 @@
 package io.github.sirnik.daduels.models;
 
+import io.github.sirnik.daduels.events.DuelMatchJoinEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -83,6 +85,11 @@ public class DuelArena {
     /**
      * Attempt to add player to arena.
      *
+     * Side Effects:
+     * <ul>
+     *     <li>Calls {@linkplain DuelMatchJoinEvent}</li>
+     * </ul>
+     *
      * @param player Player to be added.
      *
      * @return <b>false</b> if player cannot be added to arena if full or arena disabled. <b>true</b> if added as player 1 or player 2.
@@ -93,11 +100,17 @@ public class DuelArena {
         }
 
         if(player1 == null) {
+            Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
             player1 = player;
             return true;
         }
 
+        if(player.getUniqueId().equals(player1.getUniqueId())) {
+            return false;
+        }
+
         if(player2 == null) {
+            Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
             player2 = player;
             return true;
         }

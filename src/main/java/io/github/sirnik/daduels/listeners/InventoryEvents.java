@@ -25,6 +25,8 @@ public class InventoryEvents implements Listener {
         if(event.getClickedInventory() == null || event.getCurrentItem() == null)
             return;
 
+        event.setCancelled(true);
+
         menu.onClick(event);
     }
 

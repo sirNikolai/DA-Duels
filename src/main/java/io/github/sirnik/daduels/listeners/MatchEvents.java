@@ -1,7 +1,9 @@
 package io.github.sirnik.daduels.listeners;
 
 import io.github.sirnik.daduels.events.DuelMatchEndEvent;
+import io.github.sirnik.daduels.events.DuelMatchJoinEvent;
 import io.github.sirnik.daduels.events.DuelMatchStartEvent;
+import io.github.sirnik.daduels.utils.ArenaManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,5 +35,14 @@ public class MatchEvents implements Listener {
 
         e.getWinner().sendTitle(ChatColor.GREEN + "Winner!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
         e.getLoser().sendTitle(ChatColor.RED + "Loser!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
+    }
+
+    @EventHandler
+    public void onJoinArena(DuelMatchJoinEvent event) {
+        event.getPlayer().closeInventory();
+
+        if(event.getArena().isFull()) {
+            ArenaManager.INSTANCE.startGame(event.getArena());
+        }
     }
 }

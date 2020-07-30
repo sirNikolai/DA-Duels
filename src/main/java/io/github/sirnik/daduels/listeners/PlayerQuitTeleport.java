@@ -10,11 +10,11 @@ public class PlayerQuitTeleport implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        ArenaManager.INSTANCE.endGame(event.getPlayer());
+        ArenaManager.INSTANCE.removePlayer(event.getPlayer());
     }
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
-        ArenaManager.INSTANCE.endGame(event.getPlayer());
+        ArenaManager.INSTANCE.removePlayer(event.getPlayer());
     }
 }

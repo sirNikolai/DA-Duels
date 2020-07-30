@@ -47,6 +47,8 @@ public final class DADuels extends JavaPlugin {
         //Commands
         CommandManager commandManager = new CommandManager("daduels");
 
+        getCommand("daduels").setExecutor(commandManager);
+
         commandManager.addCommand(new CreateArena());
         commandManager.addCommand(new EditArena());
         commandManager.addCommand(new DeleteArena());

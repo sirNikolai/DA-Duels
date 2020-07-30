@@ -68,7 +68,7 @@ public enum InventoryMenuManager {
                 45);
 
         for(DuelArena arena : ArenaManager.INSTANCE.getArenas()) {
-            menu.addItem(createWool(arena), (InventoryClickEvent e) -> arena.addPlayer(((Player) e.getWhoClicked())));
+            menu.addItem(createWool(arena), (InventoryClickEvent e) -> ArenaManager.INSTANCE.addPlayer(((Player) e.getWhoClicked()), arena));
         }
 
         return menu;
