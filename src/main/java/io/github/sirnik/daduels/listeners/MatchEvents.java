@@ -8,6 +8,7 @@ import io.github.sirnik.daduels.utils.ArenaManager;
 import io.github.sirnik.daduels.website.ApiQuerier;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
@@ -26,11 +27,16 @@ public class MatchEvents implements Listener {
             e.getPlayer2().removePotionEffect(effect.getType());
         }
 
+        e.getPlayer1().setGameMode(GameMode.SURVIVAL);
+        e.getPlayer2().setGameMode(GameMode.SURVIVAL);
+
         e.getPlayer1().setHealth(e.getPlayer1().getHealthScale());
         e.getPlayer2().setHealth(e.getPlayer2().getHealthScale());
 
         e.getPlayer1().sendTitle(ChatColor.GREEN + "En Garde!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
         e.getPlayer2().sendTitle(ChatColor.GREEN + "En Garde!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
+
+        e.getDuelArena().setStartTime(System.currentTimeMillis());
     }
 
     @EventHandler

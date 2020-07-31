@@ -31,7 +31,10 @@ public class DuelArena {
 
     private Player player2;
 
+    private long startTime;
+
     public DuelArena(String name) {
+        this.startTime = 0L;
         this.index = -1;
         this.name = name;
         this.currentState = DuelState.DISABLED;
@@ -159,6 +162,15 @@ public class DuelArena {
     }
 
     // Getters and Setters //
+
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
 
     public long getIndex() {
         return index;

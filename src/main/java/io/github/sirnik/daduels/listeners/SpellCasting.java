@@ -13,11 +13,19 @@ import org.bukkit.event.Listener;
 
 public class SpellCasting implements Listener {
 
+    private static final long GRATUITY_PERIOD = 2000L;
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCast(SpellCastEvent event) {
         DuelArena a = ArenaManager.INSTANCE.getArenaForPlayer(event.getPlayer());
 
         if(a == null) {
+            return;
+        }
+
+        if(a.getStartTime() + GRATUITY_PERIOD > System.currentTimeMillis()) {
+            event.setCancelled(true);
+            MessageManager.getManager(event.getPlayer()).sendMessage(MessageManager.MessageType.BAD, "2 second gratuity period!");
             return;
         }
 
