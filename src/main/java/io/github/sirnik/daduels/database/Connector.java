@@ -62,6 +62,15 @@ public class Connector {
     }
 
     /**
+     * Retrieves all pairings of Duel Arena and spell blacklists in database.
+     *
+     * @return All rows of arena spell blacklists.
+     */
+    public List<ArenaSpell> getAllArenaSpellBlacklists() {
+        return arenaSpellsTable.getAll();
+    }
+
+    /**
      * Save arena to database.
      *
      * @param arena Arena to be saved.
@@ -88,6 +97,15 @@ public class Connector {
 
     public void removeSpellsFromArena(Collection<DuelSpell> spells, DuelArena arena) {
         arenaSpellsTable.deleteSingle(new ArenaSpell(arena, spells));
+    }
+
+    /**
+     * Retrives all spells in database.
+     *
+     * @return All spells in database.
+     */
+    public List<DuelSpell> getAllSpells() {
+        return spellsTable.getAll();
     }
 
     /**

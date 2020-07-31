@@ -1,16 +1,20 @@
 package io.github.sirnik.daduels.database;
 
 import com.zaxxer.hikari.HikariDataSource;
+import io.github.nikmang.daspells.spells.Spell;
+import io.github.nikmang.daspells.utils.SpellController;
 import io.github.sirnik.daduels.models.ArenaSpell;
 import io.github.sirnik.daduels.models.DuelArena;
 import io.github.sirnik.daduels.models.DuelSpell;
+import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Joining table between Arenas and spells.
@@ -22,6 +26,43 @@ public class ArenaSpellsTable extends GenericTable<ArenaSpell> {
     }
 
     @Override
+    public List<ArenaSpell> getAll() {
+        Map<Long, DuelArena> arenas = Connector.getInstance().getArenas().stream().collect(Collectors.toMap(DuelArena::getIndex, a -> a));
+        Map<Long, DuelSpell> spells = Connector.getInstance().getAllSpells().stream().collect(Collectors.toMap(DuelSpell::getIndex, a -> a));;
+
+        try(
+                Connection connection = this.getDataSource().getConnection();
+                PreparedStatement ps = connection.prepareStatement("SELECT arena_id, spell_id FROM " + this.getTableName())) {
+            Map<Long, ArenaSpell> map = new HashMap<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                if(!arenas.containsKey(rs.getLong(1))) {
+                    Bukkit.getLogger().log(Level.SEVERE, String.format("Arena with id %d not found!", rs.getLong(1)));
+                }
+
+                if(!spells.containsKey(rs.getLong(2))) {
+                    Bukkit.getLogger().log(Level.SEVERE, String.format("Spell with id %d not found!", rs.getLong(1)));
+                }
+
+                ArenaSpell arenaSpell = map.getOrDefault(rs.getLong(1), new ArenaSpell(arenas.get(rs.getLong(1)), new ArrayList<>()));
+
+                arenaSpell.addSpell(spells.get(rs.getLong(2)));
+
+                map.put(arenaSpell.getArena().getIndex(), arenaSpell);
+            }
+
+            rs.close();
+            return new ArrayList<>(map.values());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
     public void createTable() {
         List<String> names = Arrays.asList(
                 "id INT NOT NULL AUTO_INCREMENT",
@@ -30,7 +71,7 @@ public class ArenaSpellsTable extends GenericTable<ArenaSpell> {
                 "PRIMARY KEY (id)",
                 "FOREIGN KEY (spell_id) REFERENCES spells(id)",
                 "FOREIGN KEY (arena_id) REFERENCES duel_arenas(id)",
-                "UNIQUE (spell_id, arena_id");
+                "UNIQUE (spell_id, arena_id)");
 
         super.createTable(names);
     }
@@ -53,6 +94,8 @@ public class ArenaSpellsTable extends GenericTable<ArenaSpell> {
                 statement.setLong(2, arenaSpell.getArena().getIndex());
                 statement.addBatch();
             }
+
+            Bukkit.getLogger().log(Level.INFO, "Executing: " + sql);
 
             statement.executeBatch();
             connection.commit();
@@ -121,10 +164,5 @@ public class ArenaSpellsTable extends GenericTable<ArenaSpell> {
         }
 
         return exists;
-    }
-
-    @Override
-    public List<ArenaSpell> getAll() {
-        return null;
     }
 }

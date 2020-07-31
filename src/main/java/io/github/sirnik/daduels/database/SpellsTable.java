@@ -6,10 +6,7 @@ import io.github.nikmang.daspells.utils.SpellController;
 import io.github.sirnik.daduels.models.DuelSpell;
 import org.bukkit.Bukkit;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -102,7 +99,9 @@ class SpellsTable extends GenericTable<DuelSpell> {
 
         try(
                 Connection connection = this.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)){
+                PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+            Bukkit.getLogger().log(Level.INFO, "Executing: " + sql);
+
             statement.setString(1, spell.getSpellName());
 
             int affectedRows = statement.executeUpdate();
@@ -155,7 +154,9 @@ class SpellsTable extends GenericTable<DuelSpell> {
                 }
             }
 
-            Bukkit.getLogger().log(Level.SEVERE, String.format("%s spells were not found and need to be manually deleted", String.join(",", invalidSpells)));
+            if(invalidSpells.size() > 0) {
+                Bukkit.getLogger().log(Level.SEVERE, String.format("%s spells were not found and need to be manually deleted", String.join(",", invalidSpells)));
+            }
 
             rs.close();
             return lst;

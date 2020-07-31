@@ -6,10 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -107,7 +104,7 @@ class ArenaTable extends GenericTable<DuelArena> {
 
         try(
                 Connection connection = this.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)){
+                PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
 
             if(isUpdate) {
                 statement.setString(1, arena.getPlayer1Location().getWorld().getName());

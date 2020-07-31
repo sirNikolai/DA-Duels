@@ -218,9 +218,14 @@ public enum ArenaManager {
             return;
         }
 
-        inGamePlayers.remove(arena.getPlayer1().getUniqueId());
-        inGamePlayers.remove(arena.getPlayer2().getUniqueId());
-        
+        if(arena.getPlayer1() != null) {
+            inGamePlayers.remove(arena.getPlayer1().getUniqueId());
+        }
+
+        if(arena.getPlayer2() != null) {
+            inGamePlayers.remove(arena.getPlayer2().getUniqueId());
+        }
+
         arena.endGame();
     }
 

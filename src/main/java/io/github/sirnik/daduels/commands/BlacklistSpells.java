@@ -32,7 +32,13 @@ public class BlacklistSpells extends ExecutableCommand {
             return;
         }
 
-        String[] splitSpells = args[2].split(",");
+        StringBuilder joinedArgs = new StringBuilder();
+
+        for(int i = 2; i < args.length; i++) {
+            joinedArgs.append(args[i]).append(" ");
+        }
+
+        String[] splitSpells = joinedArgs.toString().trim().split(",");
         List<Spell> spells = new ArrayList<>();
 
         for(String s : splitSpells) {

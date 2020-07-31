@@ -25,4 +25,8 @@ public class ArenaSpell {
     public Collection<DuelSpell> getSpells() {
         return Collections.unmodifiableCollection(spells);
     }
+
+    public void addSpell(DuelSpell spell) {
+        spells.add(spell);
+    }
 }
