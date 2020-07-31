@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 
 public class SpellCasting implements Listener {
 
-    private static final long GRATUITY_PERIOD = 2000L;
+    private static final long GRACE_PERIOD = 2000L;
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCast(SpellCastEvent event) {
@@ -23,9 +23,9 @@ public class SpellCasting implements Listener {
             return;
         }
 
-        if(a.getStartTime() + GRATUITY_PERIOD > System.currentTimeMillis()) {
+        if(a.getStartTime() + GRACE_PERIOD > System.currentTimeMillis()) {
             event.setCancelled(true);
-            MessageManager.getManager(event.getPlayer()).sendMessage(MessageManager.MessageType.BAD, "2 second gratuity period!");
+            MessageManager.getManager(event.getPlayer()).sendMessage(MessageManager.MessageType.BAD, "2 second grace period!");
             return;
         }
 
