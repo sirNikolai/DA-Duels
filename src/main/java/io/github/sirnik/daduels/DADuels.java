@@ -30,7 +30,7 @@ public final class DADuels extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
 
-        Connector.getInstance().createTable();
+        Connector.getInstance().initializeTables();
         List<DuelArena> arenas = Connector.getInstance().getArenas();
 
         for(DuelArena arena : arenas) {
@@ -43,6 +43,7 @@ public final class DADuels extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MatchEvents(),this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeath(),this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuit(),this);
+        Bukkit.getPluginManager().registerEvents(new SpellCasting(), this);
 
         //Commands
         CommandManager commandManager = new CommandManager("daduels");

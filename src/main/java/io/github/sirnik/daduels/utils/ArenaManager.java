@@ -135,6 +135,18 @@ public enum ArenaManager {
     }
 
     /**
+     * Get Arena for a given player.
+     * <i>null</i> if player not in an arena.
+     *
+     * @param player Player that is checked for.
+     *
+     * @return Arena they are in. <b>null</b> if not in an arena.
+     */
+    public DuelArena getArenaForPlayer(Player player) {
+        return this.inGamePlayers.getOrDefault(player.getUniqueId(), null);
+    }
+
+    /**
      * Disables an arena.
      * If match is ongoing then declares match stalemate and ends it.
      *

@@ -1,14 +1,21 @@
 package io.github.sirnik.daduels.models;
 
+import io.github.nikmang.daspells.spells.Spell;
 import io.github.sirnik.daduels.events.DuelMatchJoinEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Container for data in a duel arena
  */
 public class DuelArena {
+
+    private long index;
 
     private String name;
 
@@ -18,13 +25,46 @@ public class DuelArena {
 
     private DuelState currentState;
 
+    private Set<DuelSpell> blackListedSpells;
+
     private Player player1;
 
     private Player player2;
 
     public DuelArena(String name) {
+        this.index = -1;
         this.name = name;
         this.currentState = DuelState.DISABLED;
+        this.blackListedSpells = new HashSet<>();
+    }
+
+    /**
+     * Remove spell from blacklist.
+     *
+     * @param spell Spell to be removed from blacklist.
+     */
+    public void removeSpellFromBlackList(DuelSpell spell) {
+        blackListedSpells.remove(spell);
+    }
+
+    /**
+     * Add spell to blacklist.
+     *
+     * @param spell Spell to be added to blacklist.
+     */
+    public void addSpellToBlacklist(DuelSpell spell) {
+        blackListedSpells.add(spell);
+    }
+
+    /**
+     * Checks if spell is blacklisted in the arena.
+     *
+     * @param spellName Spell name to be checked. Case insensitive
+     *
+     * @return <b>true</b> if spell is blacklisted in the arena.
+     */
+    public boolean isSpellBlackListed(String spellName) {
+        return blackListedSpells.contains(new DuelSpell(spellName));
     }
 
     /**
@@ -119,6 +159,15 @@ public class DuelArena {
     }
 
     // Getters and Setters //
+
+    public long getIndex() {
+        return index;
+    }
+
+    public void setIndex(long index) {
+        this.index = index;
+    }
+
     public String getName() {
         return name;
     }
@@ -153,5 +202,9 @@ public class DuelArena {
 
     public void setCurrentState(DuelState currentState) {
         this.currentState = currentState;
+    }
+
+    public Set<DuelSpell> getBlackListedSpells() {
+        return Collections.unmodifiableSet(blackListedSpells);
     }
 }

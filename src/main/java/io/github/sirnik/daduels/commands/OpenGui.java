@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 @CommandInfo(
         description = "Opens Arenas GUI",
-        aliases = {"og", "list", "guis"},
+        aliases = {"og", "list", "guis", "l"},
         nonPlayer = false)
 public class OpenGui extends ExecutableCommand {
     @Override
