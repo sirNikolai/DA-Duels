@@ -5,6 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when a match finishes
+ */
 public class DuelMatchEndEvent extends Event {
     private static HandlerList handlers = new HandlerList();
 

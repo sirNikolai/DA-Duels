@@ -81,7 +81,7 @@ public class CommandManager implements CommandExecutor {
         if (args.length < wanted.getClass().getAnnotation(CommandInfo.class).mandatoryArgs()) {
             MessageManager.getManager(sender).sendMessage(MessageManager.MessageType.BAD, "Insufficient arguments!");
             CommandInfo info = wanted.getClass().getAnnotation(CommandInfo.class);
-            sender.sendMessage(ChatColor.AQUA + "/" + cmd.getName() + " " + StringUtils.join(info.aliases(), " ").trim() + " " + info.usage());
+            sender.sendMessage(ChatColor.AQUA + "/" + cmd.getName() + " [" + StringUtils.join(info.aliases(), " | ").trim() + "] " + info.usage());
             return true;
         }
 
@@ -105,7 +105,7 @@ public class CommandManager implements CommandExecutor {
         for (ExecutableCommand gcmd : cmds) {
             CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
             if (!info.hidden()) {
-                sender.sendMessage(ChatColor.AQUA + "/" + cmd.getName() + " " + StringUtils.join(info.aliases(), " | ").trim() + " " + info.usage() + ChatColor.BLUE + " - " + info.description());
+                sender.sendMessage(ChatColor.AQUA + "/" + cmd.getName() + " [" + StringUtils.join(info.aliases(), " | ").trim() + "] " + info.usage() + ChatColor.BLUE + " - " + info.description());
             }
         }
         sender.sendMessage(ChatColor.LIGHT_PURPLE + "-=-=-=-=-=-=-=-=-=-=-=-");

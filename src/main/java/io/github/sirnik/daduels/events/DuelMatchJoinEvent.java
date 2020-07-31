@@ -5,6 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
+/**
+ * Called when a player successfully joins an arena.
+ */
 public class DuelMatchJoinEvent extends PlayerEvent {
 
     private static HandlerList handlers = new HandlerList();

@@ -135,6 +135,18 @@ public enum ArenaManager {
     }
 
     /**
+     * Get Arena for a given player.
+     * <i>null</i> if player not in an arena.
+     *
+     * @param player Player that is checked for.
+     *
+     * @return Arena they are in. <b>null</b> if not in an arena.
+     */
+    public DuelArena getArenaForPlayer(Player player) {
+        return this.inGamePlayers.getOrDefault(player.getUniqueId(), null);
+    }
+
+    /**
      * Disables an arena.
      * If match is ongoing then declares match stalemate and ends it.
      *
@@ -206,9 +218,14 @@ public enum ArenaManager {
             return;
         }
 
-        inGamePlayers.remove(arena.getPlayer1().getUniqueId());
-        inGamePlayers.remove(arena.getPlayer2().getUniqueId());
-        
+        if(arena.getPlayer1() != null) {
+            inGamePlayers.remove(arena.getPlayer1().getUniqueId());
+        }
+
+        if(arena.getPlayer2() != null) {
+            inGamePlayers.remove(arena.getPlayer2().getUniqueId());
+        }
+
         arena.endGame();
     }
 

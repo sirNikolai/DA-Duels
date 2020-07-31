@@ -2,6 +2,7 @@ package io.github.sirnik.daduels.utils;
 
 import io.github.sirnik.daduels.gui.Menu;
 import io.github.sirnik.daduels.models.DuelArena;
+import io.github.sirnik.daduels.models.DuelSpell;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.HumanEntity;
@@ -84,6 +85,8 @@ public enum InventoryMenuManager {
                 .map(HumanEntity::getName)
                 .collect(Collectors.joining(", "));
 
+        String blacklistedSpells = arena.getBlackListedSpells().stream().map(DuelSpell::getSpellName).collect(Collectors.joining(", "));
+
         switch (arena.getCurrentState()) {
             case DISABLED:
                 wool = new Wool(DyeColor.GRAY).toItemStack(1);
@@ -95,7 +98,10 @@ public enum InventoryMenuManager {
                         ChatColor.DARK_GREEN + "Arena Open",
                         ChatColor.YELLOW + "==========",
                         ChatColor.GREEN + "Current Players:",
-                        ChatColor.GREEN + players);
+                        ChatColor.GREEN + players,
+                        ChatColor.YELLOW + "==========",
+                        ChatColor.RED + "Blacklisted Spells:",
+                        ChatColor.GREEN + blacklistedSpells);
                 break;
             case INGAME:
                 wool = new Wool(DyeColor.RED).toItemStack(1);
