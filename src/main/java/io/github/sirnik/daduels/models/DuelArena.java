@@ -33,9 +33,16 @@ public class DuelArena {
 
     private long startTime;
 
+    private int player1Wins;
+
+    private int player2Wins;
+
+
     public DuelArena(String name) {
         this.startTime = 0L;
         this.index = -1;
+        this.player1Wins = 0;
+        this.player2Wins = 0;
         this.name = name;
         this.currentState = DuelState.DISABLED;
         this.blackListedSpells = new HashSet<>();
@@ -85,26 +92,18 @@ public class DuelArena {
      */
     public void startGame() {
         currentState = DuelState.INGAME;
-
-        player1.teleport(player1Location);
-        player2.teleport(player2Location);
     }
 
     /**
      * Ends the game.
-     * Opens arena for new users and teleports current players to spawn location in given world.
+     * Clears players, arena state, and resets win counts.
      */
     public void endGame() {
-        if(player1 != null) {
-            player1.teleport(player1Location.getWorld().getSpawnLocation());
-        }
-
-        if(player2 != null) {
-            player2.teleport(player2Location.getWorld().getSpawnLocation());
-        }
-
         player1 = null;
         player2 = null;
+
+        player1Wins = 0;
+        player2Wins = 0;
 
         currentState = DuelState.OPEN;
     }
@@ -161,8 +160,31 @@ public class DuelArena {
         return false;
     }
 
+    /**
+     * Increment win for a target player.
+     *
+     * @param player Player for whom to record the win.
+     *
+     * @return new win count for target player.
+     */
+    public int addWin(Player player) {
+        if(player.getUniqueId().equals(player1.getUniqueId())) {
+            return ++player1Wins;
+        }
+
+        return ++player2Wins;
+    }
+
     // Getters and Setters //
 
+
+    public int getPlayer1Wins() {
+        return player1Wins;
+    }
+
+    public int getPlayer2Wins() {
+        return player2Wins;
+    }
 
     public long getStartTime() {
         return startTime;

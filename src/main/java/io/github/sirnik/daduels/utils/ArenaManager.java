@@ -18,12 +18,24 @@ import java.util.*;
 public enum ArenaManager {
     INSTANCE;
 
+    private int targetWins;
+
     private Map<String, DuelArena> arenas;
     private Map<UUID, DuelArena> inGamePlayers;
 
     {
+        targetWins = 2;
         arenas = new HashMap<>();
         inGamePlayers = new HashMap<>();
+    }
+
+    /**
+     * Gets the amount of wins needed to win a match.
+     *
+     * @return Amount of battle wins needed to win a match
+     */
+    public int getWinTarget() {
+        return targetWins;
     }
 
     /**
@@ -182,13 +194,28 @@ public enum ArenaManager {
     }
 
     /**
+     * Ends a single battle bout.
+     *
+     * @param winner Player who won the battle.
+     * @param loser Player who lost the battle.
+     *
+     * @return <b>true</b> if battle winner has enough wins to win the match outright.
+     */
+    public boolean endBattle(Player winner, Player loser) {
+        DuelArena arena = this.inGamePlayers.get(loser.getUniqueId());
+
+        if(arena == null) {
+            return false;
+        }
+
+        int wins = arena.addWin(winner);
+
+        return wins >= targetWins;
+    }
+
+    /**
      * Ends game for the arena with specified player.
      * This will declare the player the loser of the battle.
-     *
-     * Side Effects:
-     * <ul>
-     *     <li>Initiates {@link DuelMatchEndEvent}</li>
-     * </ul>
      *
      * @param loser Losing player.
      */
@@ -199,11 +226,6 @@ public enum ArenaManager {
             return;
         }
 
-        Player winner = arena.getPlayer1().getUniqueId().equals(loser.getUniqueId())
-                ? arena.getPlayer2()
-                : arena.getPlayer1();
-
-        Bukkit.getPluginManager().callEvent(new DuelMatchEndEvent(winner, loser, arena));
         this.endGame(arena);
     }
 
@@ -238,13 +260,14 @@ public enum ArenaManager {
      * @return <b>true</b> if player was removed from an arena. <b>false</b> if the are not in an arena.
      */
     public boolean removePlayer(Player player) {
-        DuelArena arena = inGamePlayers.remove(player.getUniqueId());
+        DuelArena arena = inGamePlayers.get(player.getUniqueId());
 
         if(arena != null) {
             if(arena.getCurrentState() == DuelState.INGAME) {
                 this.endGame(player);
             } else {
                 arena.removePlayer(player);
+                inGamePlayers.remove(player.getUniqueId());
             }
 
             return true;

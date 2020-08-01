@@ -7,11 +7,14 @@ import io.github.sirnik.daduels.listeners.*;
 import io.github.sirnik.daduels.models.ArenaSpell;
 import io.github.sirnik.daduels.models.DuelArena;
 import io.github.sirnik.daduels.utils.ArenaManager;
+import okhttp3.OkHttpClient;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public final class DADuels extends JavaPlugin {
@@ -20,6 +23,7 @@ public final class DADuels extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
         // Plugin startup logic
         instance = this;
 
