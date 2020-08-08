@@ -16,7 +16,7 @@ class SpellsTable extends GenericTable<DuelSpell> {
     private Map<String, DuelSpell> cache;
 
     public SpellsTable(HikariDataSource dataSource) {
-        super(dataSource, "spells");
+        super(dataSource, "duel_spells");
 
         cache = new HashMap<>();
     }
@@ -107,7 +107,7 @@ class SpellsTable extends GenericTable<DuelSpell> {
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Creating duellspell failed, no rows affected.");
+                throw new SQLException("Creating duel spell failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {

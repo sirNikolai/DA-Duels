@@ -1,8 +1,6 @@
 package io.github.sirnik.daduels.database;
 
 import com.zaxxer.hikari.HikariDataSource;
-import io.github.nikmang.daspells.spells.Spell;
-import io.github.nikmang.daspells.utils.SpellController;
 import io.github.sirnik.daduels.models.ArenaSpell;
 import io.github.sirnik.daduels.models.DuelArena;
 import io.github.sirnik.daduels.models.DuelSpell;
@@ -69,7 +67,7 @@ public class ArenaSpellsTable extends GenericTable<ArenaSpell> {
                 "spell_id INT NOT NULL",
                 "arena_id INT NOT NULL",
                 "PRIMARY KEY (id)",
-                "FOREIGN KEY (spell_id) REFERENCES spells(id)",
+                "FOREIGN KEY (spell_id) REFERENCES duel_spells(id)",
                 "FOREIGN KEY (arena_id) REFERENCES duel_arenas(id)",
                 "UNIQUE (spell_id, arena_id)");
 

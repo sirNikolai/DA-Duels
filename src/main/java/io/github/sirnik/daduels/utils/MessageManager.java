@@ -26,6 +26,7 @@ public class MessageManager {
      * Get the messagemanager from a cache or create a new one. Prefix is created from the name of the main file
      *
      * @param recipients The conversables that receive message
+     * @param <T> Type of recipient (typically either console sender or player)
      * @return instance of MessageManager
      */
     @SafeVarargs

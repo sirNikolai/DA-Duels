@@ -40,7 +40,7 @@ public class ApiQuerier {
         Request request = new Request.Builder()
                 .url(recordUrl)
                 .addHeader("Authorization", authString)
-                .post(RequestBody.create(MediaType.parse("application/json"), gson.toJson(map)))
+                .post(RequestBody.create(gson.toJson(map), MediaType.parse("application/json")))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -53,19 +53,38 @@ public class ApiQuerier {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if(response.code() != 200) {
-                    throw new IOException(String.format("Could not record match. Please contact sirNik: winner: %s, loser %s", winner, loser));
+                    throw new IOException(String.format("Error Code: %d Could not record match. Please contact sirNik: winner: %s, loser %s", response.code(), winner, loser));
                 }
+
                 Bukkit.getLogger().log(Level.INFO, String.format("[DADuels] Recorded match between %s (winner) and %s (loser)", winner, loser));
             }
         });
     }
 
-    private static String getLogin(String  baseUrl, String username, String password) throws IOException {
+    private static String getLogin(String  baseUrl, String username, String password) {
         String loginUrl = String.format("%s/authenticate?username=%s&password=%s", baseUrl, username, password);
         Request request = new Request.Builder().url(loginUrl).build();
+        Response response = null;
+        String loginResponse = null;
 
-        try (Response response = client.newCall(request).execute()) {
-            return response.headers().get("Authorization");
+        try {
+            response = client.newCall(request).execute();
+
+            if(response.isSuccessful()) {
+                loginResponse = response.headers().get("Authorization");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null) {
+                if(response.body() != null) {
+                    response.body().close();
+                }
+
+                response.close();
+            }
         }
+
+        return loginResponse;
     }
 }
