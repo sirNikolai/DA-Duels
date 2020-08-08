@@ -76,8 +76,12 @@ public class ApiQuerier {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (response != null && response.body() != null) {
-                response.body().close();
+            if (response != null) {
+                if(response.body() != null) {
+                    response.body().close();
+                }
+
+                response.close();
             }
         }
 
