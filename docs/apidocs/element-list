@@ -1,0 +1,10 @@
+io.github.sirnik.daduels
+io.github.sirnik.daduels.commands
+io.github.sirnik.daduels.commands.management
+io.github.sirnik.daduels.database
+io.github.sirnik.daduels.events
+io.github.sirnik.daduels.gui
+io.github.sirnik.daduels.listeners
+io.github.sirnik.daduels.models
+io.github.sirnik.daduels.utils
+io.github.sirnik.daduels.website
