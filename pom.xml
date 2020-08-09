@@ -37,7 +37,7 @@
                 <configuration>
                     <source>8</source>
                     <reportOutputDirectory>
-                        ${basedir}/docs
+                        ${basedir}
                     </reportOutputDirectory>
                 </configuration>
             </plugin>
