@@ -1,17 +1,20 @@
-# Please follow the general troubleshooting steps first:
+## Bug reports:
+### Steps to reproduce bug
 
-- Step 1
-- Step 2
-- ...
+ - Step 1
+ - Step 2
+ - ...
 
-<!-- You can erase any parts of this template not applicable to your Issue. -->
+ ### Details of Bug
+Please replace this line with a brief summary of your issue
 
-### Bug reports:
-
-Please replace this line with a brief summary of your issue **AND** if reporting a build issue include the link from:
-
-### Features:
+## Features:
 
 **Please note by far the quickest way to get a new feature is to file a Pull Request.**
 
-We will consider your request but it may be closed if it's something we're not actively planning to work on.
+### Details of Feature
+Please replace this line with summary of feature request
+
+### Possible Dependencies Needed for Feature
+
+### New Commands Included in Feature
