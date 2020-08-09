@@ -1,6 +1,6 @@
 | License | Javadoc |
 | ------- | ------- |
-| [![License](https://img.shields.io/github/license/sirNikolai/DA-Duels)](LICENSE.md)| [![Javadocs](https://img.shields.io/badge/Javadocs-1.0.0-orange.svg)](https://nikmang.github.io/SteveCoin/index.html)
+| [![License](https://img.shields.io/github/license/sirNikolai/DA-Duels)](LICENSE.md)| [![Javadocs](https://img.shields.io/badge/Javadocs-1.0.0-orange.svg)](https://sirnikolai.github.io/DA-Duels/index.html)
 
 # DA Duels
 Organized dueling plugin, created for [Dumbledore's Army](http://http://dumbledoresarmy.enjin.com/).
