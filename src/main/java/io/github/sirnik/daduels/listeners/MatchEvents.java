@@ -9,10 +9,8 @@ import io.github.sirnik.daduels.utils.MessageManager;
 import io.github.sirnik.daduels.website.ApiQuerier;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.potion.PotionEffect;
 
 import java.io.IOException;
 
@@ -20,31 +18,17 @@ public class MatchEvents implements Listener {
 
     @EventHandler
     public void onStart(DuelMatchStartEvent e) {
-        for(PotionEffect effect : e.getPlayer1().getActivePotionEffects()) {
-            e.getPlayer1().removePotionEffect(effect.getType());
-        }
-
-        for(PotionEffect effect : e.getPlayer2().getActivePotionEffects()) {
-            e.getPlayer2().removePotionEffect(effect.getType());
-        }
-
-        e.getPlayer1().setGameMode(GameMode.SURVIVAL);
-        e.getPlayer2().setGameMode(GameMode.SURVIVAL);
-
-        e.getPlayer1().setHealth(e.getPlayer1().getHealthScale());
-        e.getPlayer2().setHealth(e.getPlayer2().getHealthScale());
-
-        e.getPlayer1().teleport(e.getDuelArena().getPlayer1Location());
-        e.getPlayer2().teleport(e.getDuelArena().getPlayer2Location());
+        e.getDuelArena().getPlayer1().preparePlayer();
+        e.getDuelArena().getPlayer2().preparePlayer();
 
         String startString = String.format(
                 "%s Round: %d/%d",
                 ChatColor.YELLOW,
-                e.getDuelArena().getPlayer1Wins() + e.getDuelArena().getPlayer2Wins() + 1,
+                e.getDuelArena().getPlayer1().getWins() + e.getDuelArena().getPlayer2().getWins() + 1,
                 ArenaManager.INSTANCE.getWinTarget() * 2 - 1);
 
-        e.getPlayer1().sendTitle(ChatColor.GREEN + "En Garde!", startString, 10, 70, 20);
-        e.getPlayer2().sendTitle(ChatColor.GREEN + "En Garde!", startString, 10, 70, 20);
+        e.getPlayer1().getPlayer().sendTitle(ChatColor.GREEN + "En Garde!", startString, 10, 70, 20);
+        e.getPlayer2().getPlayer().sendTitle(ChatColor.GREEN + "En Garde!", startString, 10, 70, 20);
 
         e.getDuelArena().setStartTime(System.currentTimeMillis());
     }

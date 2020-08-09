@@ -5,7 +5,6 @@ import io.github.sirnik.daduels.models.DuelArena;
 import io.github.sirnik.daduels.models.DuelSpell;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.DyeColor;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -82,7 +81,7 @@ public enum InventoryMenuManager {
         String players = Stream
                 .of(arena.getPlayer1(), arena.getPlayer2())
                 .filter(Objects::nonNull)
-                .map(HumanEntity::getName)
+                .map(p -> p.getPlayer().getName())
                 .collect(Collectors.joining(", "));
 
         String blacklistedSpells = arena.getBlackListedSpells().stream().map(DuelSpell::getSpellName).collect(Collectors.joining(", "));

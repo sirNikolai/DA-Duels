@@ -1,7 +1,6 @@
 package io.github.sirnik.daduels.utils;
 
 import io.github.sirnik.daduels.database.Connector;
-import io.github.sirnik.daduels.events.DuelMatchEndEvent;
 import io.github.sirnik.daduels.events.DuelMatchStartEvent;
 import io.github.sirnik.daduels.models.DuelArena;
 import io.github.sirnik.daduels.models.DuelState;
@@ -241,11 +240,11 @@ public enum ArenaManager {
         }
 
         if(arena.getPlayer1() != null) {
-            inGamePlayers.remove(arena.getPlayer1().getUniqueId());
+            inGamePlayers.remove(arena.getPlayer1().getPlayer().getUniqueId());
         }
 
         if(arena.getPlayer2() != null) {
-            inGamePlayers.remove(arena.getPlayer2().getUniqueId());
+            inGamePlayers.remove(arena.getPlayer2().getPlayer().getUniqueId());
         }
 
         arena.endGame();
@@ -296,7 +295,7 @@ public enum ArenaManager {
             return false;
         }
 
-        if(arena.addPlayer(player)) {
+        if(arena.addPlayer(player) != null) {
             this.inGamePlayers.put(player.getUniqueId(), arena);
             return true;
         }

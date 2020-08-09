@@ -1,6 +1,5 @@
 package io.github.sirnik.daduels.models;
 
-import io.github.nikmang.daspells.spells.Spell;
 import io.github.sirnik.daduels.events.DuelMatchJoinEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,25 +26,38 @@ public class DuelArena {
 
     private Set<DuelSpell> blackListedSpells;
 
-    private Player player1;
+    private DuelPlayer player1;
 
-    private Player player2;
+    private DuelPlayer player2;
 
     private long startTime;
-
-    private int player1Wins;
-
-    private int player2Wins;
 
 
     public DuelArena(String name) {
         this.startTime = 0L;
         this.index = -1;
-        this.player1Wins = 0;
-        this.player2Wins = 0;
         this.name = name;
         this.currentState = DuelState.DISABLED;
         this.blackListedSpells = new HashSet<>();
+    }
+
+    /**
+     * Attempts to get {@linkplain DuelPlayer} container for a provided player.
+     *
+     * @param pl Player for whom to get representing {@linkplain DuelPlayer} object.
+     *
+     * @return {@linkplain DuelPlayer} container for target player. <b>null</b> if player container is not found.
+     */
+    public DuelPlayer getDuelPlayer(Player pl) {
+        if(player1 != null && player1.getPlayer().getUniqueId().equals(pl.getUniqueId())) {
+            return player1;
+        }
+
+        if(player2 != null && player2.getPlayer().getUniqueId().equals(pl.getUniqueId())) {
+            return player2;
+        }
+
+        return null;
     }
 
     /**
@@ -102,9 +114,6 @@ public class DuelArena {
         player1 = null;
         player2 = null;
 
-        player1Wins = 0;
-        player2Wins = 0;
-
         currentState = DuelState.OPEN;
     }
 
@@ -114,12 +123,12 @@ public class DuelArena {
      * @param player Player to be removed
      */
     public void removePlayer(Player player) {
-        if(player1 != null && player.getUniqueId().equals(player1.getUniqueId())) {
+        if(player1 != null && player.getUniqueId().equals(player1.getPlayer().getUniqueId())) {
             player1 = null;
             return;
         }
 
-        if(player2 != null && player.getUniqueId().equals(player2.getUniqueId())) {
+        if(player2 != null && player.getUniqueId().equals(player2.getPlayer().getUniqueId())) {
             player2 = null;
         }
     }
@@ -134,30 +143,30 @@ public class DuelArena {
      *
      * @param player Player to be added.
      *
-     * @return <b>false</b> if player cannot be added to arena if full or arena disabled. <b>true</b> if added as player 1 or player 2.
+     * @return <b>null</b> if a player could not be added. Otherwise returns the created {@linkplain DuelPlayer} container for said player.
      */
-    public boolean addPlayer(Player player) {
+    public DuelPlayer addPlayer(Player player) {
         if(this.currentState != DuelState.OPEN) {
-            return false;
+            return null;
         }
 
         if(player1 == null) {
-            player1 = player;
+            player1 = new DuelPlayer(player, player1Location);
             Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
-            return true;
+            return player1;
         }
 
-        if(player.getUniqueId().equals(player1.getUniqueId())) {
-            return false;
+        if(player.getUniqueId().equals(player1.getPlayer().getUniqueId())) {
+            return null;
         }
 
         if(player2 == null) {
-            player2 = player;
+            player2 = new DuelPlayer(player, player2Location);
             Bukkit.getPluginManager().callEvent(new DuelMatchJoinEvent(player, this));
-            return true;
+            return player2;
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -168,23 +177,14 @@ public class DuelArena {
      * @return new win count for target player.
      */
     public int addWin(Player player) {
-        if(player.getUniqueId().equals(player1.getUniqueId())) {
-            return ++player1Wins;
+        if(player.getUniqueId().equals(player1.getPlayer().getUniqueId())) {
+            return player1.addWin();
         }
 
-        return ++player2Wins;
+        return player2.addWin();
     }
 
     // Getters and Setters //
-
-
-    public int getPlayer1Wins() {
-        return player1Wins;
-    }
-
-    public int getPlayer2Wins() {
-        return player2Wins;
-    }
 
     public long getStartTime() {
         return startTime;
@@ -206,11 +206,11 @@ public class DuelArena {
         return name;
     }
 
-    public Player getPlayer1() {
+    public DuelPlayer getPlayer1() {
         return player1;
     }
 
-    public Player getPlayer2() {
+    public DuelPlayer getPlayer2() {
         return player2;
     }
 

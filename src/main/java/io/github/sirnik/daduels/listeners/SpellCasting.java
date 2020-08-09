@@ -8,6 +8,7 @@ import io.github.nikmang.daspells.events.SpellHitEntityEvent;
 import io.github.nikmang.daspells.spells.Spell;
 import io.github.nikmang.daspells.utils.PlayerManager;
 import io.github.sirnik.daduels.models.DuelArena;
+import io.github.sirnik.daduels.models.DuelPlayer;
 import io.github.sirnik.daduels.utils.ArenaManager;
 import io.github.sirnik.daduels.utils.MessageManager;
 import org.bukkit.entity.Player;
@@ -18,11 +19,19 @@ import org.bukkit.event.Listener;
 public class SpellCasting implements Listener {
 
     private static final long GRACE_PERIOD = 2000L;
+    private static final long THROTTLE_CAST = 500L;
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCast(SpellCastEvent event) {
         DuelArena a = ArenaManager.INSTANCE.getArenaForPlayer(event.getPlayer());
+
         if(a == null) {
+            return;
+        }
+
+        DuelPlayer player = a.getDuelPlayer(event.getPlayer());
+
+        if(player == null) {
             return;
         }
 
@@ -32,12 +41,19 @@ public class SpellCasting implements Listener {
             return;
         }
 
+        if(player.getLastCast() + THROTTLE_CAST > System.currentTimeMillis()) {
+            event.setCancelled(true);
+            MessageManager.getManager(event.getPlayer()).sendMessage(MessageManager.MessageType.BAD, "0.5 sec throttle!");
+            return;
+        }
+
         if(a.isSpellBlackListed(event.getSpell().toString())) {
             event.setCancelled(true);
             MessageManager.getManager(event.getPlayer()).sendMessage(MessageManager.MessageType.BAD, "Spell is banned!");
             return;
         }
 
+        player.setLastCast(System.currentTimeMillis());
         updateSpellData(event.getPlayer(), event.getSpell());
     }
 

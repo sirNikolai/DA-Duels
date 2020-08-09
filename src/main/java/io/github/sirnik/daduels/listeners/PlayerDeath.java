@@ -28,9 +28,9 @@ public class PlayerDeath implements Listener {
             return;
         }
 
-        Player winner = player.getUniqueId().equals(duelArena.getPlayer1().getUniqueId())
-                ? duelArena.getPlayer2()
-                : duelArena.getPlayer1();
+        Player winner = player.getUniqueId().equals(duelArena.getPlayer1().getPlayer().getUniqueId())
+                ? duelArena.getPlayer2().getPlayer()
+                : duelArena.getPlayer1().getPlayer();
 
         if(event.getFinalDamage() >= player.getHealth()) {
             event.setCancelled(true);
@@ -38,7 +38,7 @@ public class PlayerDeath implements Listener {
                 ArenaManager.INSTANCE.endGame(player);
                 Bukkit.getPluginManager().callEvent(new DuelMatchEndEvent(winner, player, duelArena));
             } else{
-                MessageManager.getManager(duelArena.getPlayer1(), duelArena.getPlayer2()).sendMessage(MessageManager.MessageType.NEUTRAL, winner.getName() + " wins the round!");
+                MessageManager.getManager(duelArena.getPlayer1().getPlayer(), duelArena.getPlayer2().getPlayer()).sendMessage(MessageManager.MessageType.NEUTRAL, winner.getName() + " wins the round!");
                 Bukkit.getPluginManager().callEvent(new DuelMatchStartEvent(duelArena.getPlayer1(), duelArena.getPlayer2(), duelArena));
             }
         }
