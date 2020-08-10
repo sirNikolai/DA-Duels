@@ -9,6 +9,7 @@ import io.github.sirnik.daduels.utils.MessageManager;
 import io.github.sirnik.daduels.website.ApiQuerier;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -18,8 +19,11 @@ public class MatchEvents implements Listener {
 
     @EventHandler
     public void onStart(DuelMatchStartEvent e) {
-        e.getDuelArena().getPlayer1().preparePlayer();
-        e.getDuelArena().getPlayer2().preparePlayer();
+        e.getPlayer1().resetPlayerStats();
+        e.getPlayer2().resetPlayerStats();
+
+        e.getPlayer1().getPlayer().teleport(e.getPlayer1().getSpawnLocation());
+        e.getPlayer2().getPlayer().teleport(e.getPlayer2().getSpawnLocation());
 
         String startString = String.format(
                 "%s Round: %d/%d",
@@ -35,22 +39,28 @@ public class MatchEvents implements Listener {
 
     @EventHandler
     public void onEnd(DuelMatchEndEvent e) {
-        e.getWinner().setHealth(e.getWinner().getHealthScale());
-        e.getLoser().setHealth(e.getLoser().getHealthScale());
+        Player winner = e.getWinner().getPlayer();
+        Player loser = e.getLoser().getPlayer();
 
-        e.getWinner().sendTitle(ChatColor.GREEN + "Winner!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
-        e.getLoser().sendTitle(ChatColor.RED + "Loser!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
+        e.getWinner().resetPlayerStats();
+        e.getLoser().resetPlayerStats();
 
-        e.getWinner().teleport(e.getWinner().getWorld().getSpawnLocation());
-        e.getLoser().teleport(e.getLoser().getWorld().getSpawnLocation());
+        e.getWinner().getPlayer().setScoreboard(e.getWinner().getExistingScoreboard());
+        e.getLoser().getPlayer().setScoreboard(e.getLoser().getExistingScoreboard());
+
+        winner.sendTitle(ChatColor.GREEN + "Winner!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
+        loser.sendTitle(ChatColor.RED + "Loser!", ChatColor.YELLOW + "Arena: " + e.getDuelArena().getName(), 10, 70, 20);
+
+        winner.teleport(winner.getWorld().getSpawnLocation());
+        loser.teleport(loser.getWorld().getSpawnLocation());
 
         Bukkit.getScheduler().runTaskAsynchronously(DADuels.getInstance(), () -> {
             try {
-                ApiQuerier.recordResult(e.getWinner().getUniqueId(), e.getLoser().getUniqueId());
+                ApiQuerier.recordResult(winner.getUniqueId(), loser.getUniqueId());
             } catch (IOException ex) {
-                MessageManager.getManager(e.getLoser(), e.getWinner()).sendMessage(
+                MessageManager.getManager(loser, winner).sendMessage(
                         MessageManager.MessageType.BAD,
-                        "Save failed to site. Please send screenshot to sirNik: " + e.getWinner().getUniqueId() + " " + e.getLoser().getUniqueId());
+                        "Save failed to site. Please send screenshot to sirNik: " + winner.getUniqueId() + " " + loser.getUniqueId());
                 ex.printStackTrace();
             }
         });

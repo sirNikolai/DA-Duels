@@ -1,7 +1,7 @@
 package io.github.sirnik.daduels.events;
 
 import io.github.sirnik.daduels.models.DuelArena;
-import org.bukkit.entity.Player;
+import io.github.sirnik.daduels.models.DuelPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,21 +11,21 @@ import org.bukkit.event.HandlerList;
 public class DuelMatchEndEvent extends Event {
     private static HandlerList handlers = new HandlerList();
 
-    private Player winner;
-    private Player loser;
+    private DuelPlayer winner;
+    private DuelPlayer loser;
     private DuelArena duelArena;
 
-    public DuelMatchEndEvent(Player winner, Player loser, DuelArena duelArena) {
+    public DuelMatchEndEvent(DuelPlayer winner, DuelPlayer loser, DuelArena duelArena) {
         this.winner = winner;
         this.loser = loser;
         this.duelArena = duelArena;
     }
 
-    public Player getWinner() {
+    public DuelPlayer getWinner() {
         return winner;
     }
 
-    public Player getLoser() {
+    public DuelPlayer getLoser() {
         return loser;
     }
 

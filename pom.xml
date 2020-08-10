@@ -6,7 +6,7 @@
 
     <groupId>io.github.sirnik</groupId>
     <artifactId>DA-Duels</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-HEARTS</version>
     <packaging>jar</packaging>
 
     <name>DA Duels</name>
@@ -39,6 +39,9 @@
                     <reportOutputDirectory>
                         ${basedir}
                     </reportOutputDirectory>
+                    <destDir>
+                        docs
+                    </destDir>
                 </configuration>
             </plugin>
             <plugin>

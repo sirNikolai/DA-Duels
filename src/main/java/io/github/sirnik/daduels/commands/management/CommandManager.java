@@ -1,5 +1,6 @@
 package io.github.sirnik.daduels.commands.management;
 
+import io.github.sirnik.daduels.DADuels;
 import io.github.sirnik.daduels.utils.MessageManager;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -101,13 +102,14 @@ public class CommandManager implements CommandExecutor {
     }
 
     private void sendCommandList(CommandSender sender, Command cmd) {
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "-=-=-=-" + ChatColor.DARK_PURPLE + "[" + ChatColor.YELLOW + name + ChatColor.DARK_PURPLE + "]" + ChatColor.LIGHT_PURPLE + "-=-=-=-");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "-=-=-=-[" + ChatColor.YELLOW + name + ChatColor.DARK_PURPLE + "]-=-=-=-");
         for (ExecutableCommand gcmd : cmds) {
             CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
             if (!info.hidden()) {
-                sender.sendMessage(ChatColor.AQUA + "/" + cmd.getName() + " [" + StringUtils.join(info.aliases(), " | ").trim() + "] " + info.usage() + ChatColor.BLUE + " - " + info.description());
+                sender.sendMessage(ChatColor.GREEN + "/" + cmd.getName() + " [" + StringUtils.join(info.aliases(), " | ").trim() + "] " + info.usage() + ChatColor.WHITE + " - " + info.description());
             }
         }
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "-=-=-=-=-=-=-=-=-=-=-=-");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "-=-=-=-=-=-=-=-=-=-=-=-");
+        sender.sendMessage(ChatColor.AQUA + "Version: " + ChatColor.GREEN + DADuels.getInstance().getDescription().getVersion());
     }
 }

@@ -1,16 +1,24 @@
 package io.github.sirnik.daduels.models;
 
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 /**
  * Container for a dueller.
  */
 public class DuelPlayer {
+    private static final Scoreboard HEALTH_BOARD = createHealthScoreboard();
 
     private Player player;
+
+    private Scoreboard existingScoreboard;
 
     private int wins;
 
@@ -26,6 +34,7 @@ public class DuelPlayer {
      */
     public DuelPlayer(Player player, Location spawnLocation) {
         this.player = player;
+        this.existingScoreboard = player.getScoreboard();
         this.spawnLocation = spawnLocation;
         this.lastCast = 0L;
         this.wins = 0;
@@ -40,19 +49,19 @@ public class DuelPlayer {
      *   <li>Removes all potion effects.</li>
      *   <li>Extinguishes flames from player.</li>
      *   <li>Sets player back to max health.</li>
-     *   <li>Teleports player to their start location.</li>
+     *   <li>Sets scoreboard to show health.</li>
      * </ul>
      */
-    public void preparePlayer() {
+    public void resetPlayerStats() {
         for(PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
 
         player.setGameMode(GameMode.SURVIVAL);
         player.setFireTicks(0);
-        player.setHealth(player.getHealthScale());
 
-        player.teleport(spawnLocation);
+        player.setScoreboard(HEALTH_BOARD);
+        player.setHealth(player.getHealthScale());
     }
 
     /**
@@ -83,6 +92,20 @@ public class DuelPlayer {
 
     public long getLastCast() {
         return lastCast;
+    }
+
+    public Scoreboard getExistingScoreboard() {
+        return existingScoreboard;
+    }
+
+    private static Scoreboard createHealthScoreboard() {
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+
+        Objective objective = scoreboard.registerNewObjective("showhealth", "health");
+        objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        objective.setDisplayName(ChatColor.DARK_RED + "❤");
+
+        return scoreboard;
     }
 
     @Override
