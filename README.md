@@ -17,7 +17,7 @@ Organized dueling plugin, created for [Dumbledore's Army](http://http://dumbledo
 | ------------------ | --------------------- |
 | DASpells           | Spigot Plugin         |
 | MySQL              | Database              |
-| https://sirnik.dev | Data aggregation site |
+| https://sirnik.dev/dastatsfrontend/#/duelers | Data aggregation site |
 
 # Commands
 _NOTE_: all commands are prefaced with `/daduels` e.g `/daduels help`.
